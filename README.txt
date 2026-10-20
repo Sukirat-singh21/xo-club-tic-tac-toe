@@ -2,31 +2,27 @@ XO CLUB — ONLINE TIC-TAC-TOE
 
 QUICK START
 
-1. Send TicTacToe.html to your friend. Both players open it in a recent
-   version of Chrome, Edge, Firefox, or Safari.
-2. One player selects “Create invite” and clicks “Create invite code.” Send
-   the complete code to your friend using any chat app.
-3. Your friend selects “Join a friend,” pastes the invite, and clicks
-   “Join & make reply.” They send the answer code back to you.
-4. Paste that answer into “Friend’s answer code” and click “Connect to
-   friend.” When the top status says “Connected · direct,” X plays first.
+1. Open https://sukirat-singh21.github.io/xo-club-tic-tac-toe/ or open
+   TicTacToe.html in a recent browser. Both players need an internet
+   connection.
+2. One player clicks “Create game,” then shares the invite link.
+3. The friend opens the link. They join automatically as O; no reply code is
+   needed. Keep the creator’s page open until the match ends.
 
 HOW IT CONNECTS
 
-The game uses a WebRTC data channel for the game. Connection codes are the
-signaling step: they let each browser exchange the information needed to
-connect. A public STUN service helps the browsers discover a direct route;
-it does not relay game moves. No account or game server is used.
+PeerJS Cloud handles the short signaling step that helps the browsers find
+each other. After that, WebRTC sends game moves directly between the two
+browsers. PeerJS Cloud does not relay the game moves. The room ID in the
+invite link is temporary; anyone with the link can try to join the room.
 
-Direct peer connections cannot pass through every school, work, mobile, or
-strictly firewalled network. If the connection fails, try another network.
-This version does not include a TURN relay fallback.
-
-The invite code contains network routing details. Share it only with the
-person you intend to play with. The code is temporary and is not stored by
-this game.
+Some school, work, mobile, or firewalled networks block direct peer
+connections. This version has no TURN relay fallback, so try another network
+if the direct connection fails. Internet access is also needed to load the
+PeerJS browser library and reach its signaling service.
 
 FILES
 
-TicTacToe.html  The complete, self-contained game. No install or build step.
+TicTacToe.html  The game, for local play or GitHub Pages hosting.
+index.html      The GitHub Pages entry point.
 README.txt      These quick-start instructions.

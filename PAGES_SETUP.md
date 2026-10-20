@@ -12,7 +12,10 @@ no build step.
    Pages settings. Project sites normally use
    `https://OWNER.github.io/REPOSITORY/`.
 
-The site is publicly reachable. Game moves still use the WebRTC data channel;
-the invite and answer codes are exchanged manually as the signaling step.
-The game uses STUN for route discovery and has no TURN relay fallback, so some
-restricted networks may not establish a direct connection.
+The site is publicly reachable. Players create a game and share its invite
+link; opening that link joins automatically. PeerJS Cloud handles signaling
+to find the other browser, then WebRTC carries the game moves directly between
+players. The signaling service does not relay game moves. The game has no TURN
+relay fallback, so some restricted networks may not establish a direct
+connection. Internet access is required to load the PeerJS browser library
+and reach the signaling service.

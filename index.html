@@ -111,6 +111,7 @@
     .text-input { padding: 10px 12px; font-size: 12px; }
     .text-input:focus, .code-box:focus { border-color: #8193bd; box-shadow: 0 0 0 3px rgba(140,185,255,.1); }
     .code-box { display: block; min-height: 78px; padding: 10px; resize: vertical; color: #c2cbea; font: 10px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+    .invite-link { min-height: 0; height: 40px; resize: none; }
     .code-box[readonly] { color: #a9b7d9; }
     .button-row { display: flex; gap: 8px; margin-top: 8px; }
     .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 41px; padding: 0 14px; border: 1px solid transparent; border-radius: 10px; background: var(--lime); color: #151b22; font-size: 11px; font-weight: 850; cursor: pointer; transition: transform .15s ease, filter .15s ease, opacity .15s ease; }
@@ -180,9 +181,9 @@
       <div>
         <div class="eyebrow">One board, two screens</div>
         <h1>Tic-tac-toe.<br><em>Anywhere.</em></h1>
-        <p>A pocket-sized classic, played live between two browsers. No accounts, no game server, no installs.</p>
+        <p>A pocket-sized classic, played live between two browsers. No accounts or installs; moves go directly between players.</p>
       </div>
-      <div class="hero-note"><strong>Just the two of you.</strong> Swap connection codes in a chat you already use, then the moves travel directly between your devices.</div>
+      <div class="hero-note"><strong>Just the two of you.</strong> Share one invite link. The game moves travel directly between your devices.</div>
     </section>
 
     <main class="layout">
@@ -224,7 +225,7 @@
 
       <aside class="card connect-card" aria-label="Connect to a friend">
         <div class="connect-title-row">
-          <div><div class="section-label">Online play</div><h2>Bring a friend in</h2><p class="connect-intro">Make a direct peer link with two connection codes. It takes about 20 seconds.</p></div>
+          <div><div class="section-label">Online play</div><h2>Bring a friend in</h2><p class="connect-intro">Create a game and send one link. Your friend taps it to join.</p></div>
           <span class="p2p-chip"><span aria-hidden="true">●</span> P2P</span>
         </div>
 
@@ -239,43 +240,36 @@
         </div>
 
         <div class="pane" id="hostPane" role="tabpanel" aria-labelledby="hostTab">
-          <div class="step"><span class="step-number">1</span><div class="step-content"><p class="step-title">Create an invite</p><p class="step-desc">You’ll play as X. Send your invite code to your friend in any chat.</p><button class="button full" id="createButton" type="button">Create invite code <span class="arrow">→</span></button>
+          <div class="step"><span class="step-number">1</span><div class="step-content"><p class="step-title">Create a game</p><p class="step-desc">You’ll play as X. Share the link with your friend.</p><button class="button full" id="createButton" type="button">Create game <span class="arrow">→</span></button>
               <div class="output-block" id="inviteOutputBlock" hidden>
-                <div class="output-head"><label class="field-label" for="inviteOutput">Your invite code</label><button class="copy-button" id="copyInviteButton" type="button">Copy code</button></div>
-                <textarea class="code-box" id="inviteOutput" readonly spellcheck="false" aria-label="Your invite code"></textarea>
-                <p class="microcopy">Send the whole code to your friend. It includes network details used to make the direct connection.</p>
+                <div class="output-head"><label class="field-label" for="inviteOutput">Invite link</label><span><button class="copy-button" id="shareInviteButton" type="button">Share</button><button class="copy-button" id="copyInviteButton" type="button">Copy link</button></span></div>
+                <textarea class="code-box invite-link" id="inviteOutput" readonly spellcheck="false" aria-label="Your invite link"></textarea>
+                <p class="microcopy">Your friend can open this link to join automatically. Keep this page open until they connect.</p>
               </div>
             </div></div>
-          <div class="step"><span class="step-number">2</span><div class="step-content"><p class="step-title">Paste their reply</p><p class="step-desc">Your friend will send back an answer code. Paste it here to finish connecting.</p>
-              <label class="field-label" for="answerInput">Friend’s answer code</label>
-              <textarea class="code-box" id="answerInput" spellcheck="false" placeholder="Paste the answer code here"></textarea>
-              <button class="button secondary full" id="connectButton" type="button" disabled>Connect to friend <span class="arrow">→</span></button>
+          <div class="step"><span class="step-number">2</span><div class="step-content"><p class="step-title">Wait for your friend</p><p class="step-desc">The game starts as soon as they open the invite.</p>
             </div></div>
         </div>
 
         <div class="pane" id="joinPane" role="tabpanel" aria-labelledby="joinTab" hidden>
-          <div class="step"><span class="step-number">1</span><div class="step-content"><p class="step-title">Paste your friend’s invite</p><p class="step-desc">They’ll be X. You’ll play as O.</p>
-              <label class="field-label" for="inviteInput">Friend’s invite code</label>
-              <textarea class="code-box" id="inviteInput" spellcheck="false" placeholder="Paste the invite code here"></textarea>
-              <button class="button full" id="joinButton" type="button">Join &amp; make reply <span class="arrow">→</span></button>
-              <div class="output-block" id="answerOutputBlock" hidden>
-                <div class="output-head"><label class="field-label" for="answerOutput">Your answer code</label><button class="copy-button" id="copyAnswerButton" type="button">Copy code</button></div>
-                <textarea class="code-box" id="answerOutput" readonly spellcheck="false" aria-label="Your answer code"></textarea>
-                <p class="microcopy">Send this code back to your friend. Once they connect, the board will wake up.</p>
-              </div>
+          <div class="step"><span class="step-number">1</span><div class="step-content"><p class="step-title">Join your friend’s game</p><p class="step-desc">Open their invite link, or paste the link or room ID here. They’ll be X; you’ll play as O.</p>
+              <label class="field-label" for="inviteInput">Invite link or room ID</label>
+              <input class="text-input" id="inviteInput" type="text" spellcheck="false" placeholder="Paste invite link or room ID">
+              <button class="button full" id="joinButton" type="button">Join game <span class="arrow">→</span></button>
             </div></div>
         </div>
 
-        <div class="notice" id="notice" role="status" aria-live="polite"><span class="notice-icon">i</span><span id="noticeText">Both players need an internet connection and the same game file. Use any chat to exchange the codes.</span></div>
+        <div class="notice" id="notice" role="status" aria-live="polite"><span class="notice-icon">i</span><span id="noticeText">Create a game and share its invite link. A small signaling service helps the browsers find each other; moves go directly between players.</span></div>
       </aside>
     </main>
 
     <footer class="bottom-notes">
-      <span><strong>How the link works:</strong> one quick STUN lookup helps browsers find a direct route. Game moves are sent peer-to-peer; they don’t pass through a game server.</span>
+      <span><strong>How the link works:</strong> PeerJS helps the browsers find each other. Game moves then travel peer-to-peer; they don’t pass through the signaling service.</span>
       <span>Direct links can be blocked by some school, work, or mobile networks.</span>
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
   <script>
     (function () {
       "use strict";
@@ -296,6 +290,8 @@
       var peer = null;
       var channel = null;
       var busy = false;
+      var disconnecting = false;
+      var GAME_URL = "https://sukirat-singh21.github.io/xo-club-tic-tac-toe/";
 
       function setNotice(message, kind) {
         var box = $("notice");
@@ -307,7 +303,6 @@
         busy = value;
         $("createButton").disabled = value;
         $("joinButton").disabled = value;
-        $("connectButton").disabled = value || !peer || !isHost || peer.signalingState !== "have-local-offer" || !$("answerInput").value.trim();
       }
 
       function currentName() {
@@ -337,7 +332,7 @@
         return null;
       }
 
-      function isConnected() { return !!channel && channel.readyState === "open"; }
+      function isConnected() { return !!channel && channel.open === true; }
 
       function render() {
         var connected = isConnected();
@@ -347,7 +342,7 @@
         $("captionO").textContent = localMark === "O" ? "you · O" : (localMark === "X" ? "friend · O" : "second move");
         $("playerX").classList.toggle("active", connected && !gameOver && turn === "X");
         $("playerO").classList.toggle("active", connected && !gameOver && turn === "O");
-        $("matchLabel").textContent = connected ? "You’re in a live match" : (localMark ? "Invite ready · waiting for friend" : "Waiting for players");
+        $("matchLabel").textContent = connected ? "You’re in a live match" : (isHost && localMark ? "Invite ready · waiting for friend" : (localMark ? "Joining game…" : "Waiting for players"));
         $("leaveButton").hidden = !peer && !localMark;
         $("rematchButton").disabled = !connected || !gameOver;
 
@@ -367,7 +362,7 @@
           $("turnText").textContent = localMark ? "Waiting for your friend to connect." : "Create or join a game to begin.";
           $("turnMark").textContent = "·";
           $("turnMark").className = "turn-mark neutral";
-          setTopStatus(peer && peer.connectionState === "connecting" ? "Connecting…" : "Not connected", "idle");
+          setTopStatus(peer && localMark ? (isHost ? "Waiting for friend" : "Connecting…") : "Not connected", "idle");
         } else if (gameOver && winner) {
           $("turnText").textContent = (winner === localMark ? "You win! " : playerLabel(winner) + " wins. ") + "Fancy a rematch?";
           $("turnMark").textContent = winner;
@@ -463,96 +458,95 @@
 
       function attachChannel(dataChannel) {
         channel = dataChannel;
-        dataChannel.onopen = function () {
+        dataChannel.on("open", function () {
           setNotice("You’re connected directly. The board is live — X starts.", "success");
           dataChannel.send(JSON.stringify({ type: "hello", name: localName }));
           if (isHost) dataChannel.send(JSON.stringify(snapshot()));
           render();
-        };
-        dataChannel.onmessage = function (event) { receiveMessage(event.data); };
-        dataChannel.onclose = function () {
+        });
+        dataChannel.on("data", function (data) { receiveMessage(typeof data === "string" ? data : JSON.stringify(data)); });
+        dataChannel.on("close", function () {
+          if (disconnecting) return;
           setTopStatus("Connection ended", "error");
           setNotice("Your friend disconnected. Make a fresh invite to play again.", "error");
           render();
-        };
-        dataChannel.onerror = function () {
+        });
+        dataChannel.on("error", function () {
           setNotice("The direct connection hit a network error. Try reconnecting.", "error");
-        };
+        });
       }
 
-      function makePeerConnection() {
-        if (!window.RTCPeerConnection) throw new Error("This browser does not support WebRTC. Try a current version of Chrome, Edge, Firefox, or Safari.");
-        var connection = new RTCPeerConnection({
-          iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+      function peerErrorMessage(error) {
+        var type = error && error.type;
+        if (type === "peer-unavailable") return "That invite has expired or the host closed the page. Ask them for a fresh link.";
+        if (type === "unavailable-id") return "Couldn’t reserve a room right now. Please create the game again.";
+        if (type === "network" || type === "server-error" || type === "socket-error" || type === "socket-closed") return "Couldn’t reach the matchmaking service. Check your internet connection and try again.";
+        if (type === "webrtc") return "Your network could not make a direct peer connection. Try another Wi-Fi or mobile network.";
+        return "The connection couldn’t be made. Please try again.";
+      }
+
+      function makePeer() {
+        if (!window.Peer) throw new Error("The connection helper did not load. Refresh this page while online and retry.");
+        var connection = new window.Peer();
+        peer = connection;
+        connection.on("connection", function (dataConnection) {
+          if (!isHost || channel) { dataConnection.close(); return; }
+          attachChannel(dataConnection);
         });
-        connection.addEventListener("connectionstatechange", function () {
-          if (connection.connectionState === "failed") {
-            setTopStatus("Direct link failed", "error");
-            setNotice("A direct route could not be found. One network may block peer-to-peer traffic; try another Wi-Fi or mobile network.", "error");
-          } else if (connection.connectionState === "connecting") {
-            setTopStatus("Connecting…", "idle");
-          }
+        connection.on("error", function (error) {
+          if (connection !== peer) return;
+          setTopStatus("Connection issue", "error");
+          setNotice(peerErrorMessage(error), "error");
         });
-        connection.addEventListener("datachannel", function (event) { attachChannel(event.channel); });
         return connection;
       }
 
-      function waitForIce(connection) {
-        if (connection.iceGatheringState === "complete") return Promise.resolve();
+      function waitForPeerOpen(connection) {
+        if (connection.open && connection.id) return Promise.resolve(connection.id);
         return new Promise(function (resolve, reject) {
+          var finished = false;
           var timeout = setTimeout(function () {
-            connection.removeEventListener("icegatheringstatechange", onStateChange);
-            reject(new Error("Network route discovery took too long. Check your internet connection and retry."));
-          }, 25000);
-          function onStateChange() {
-            if (connection.iceGatheringState === "complete") {
-              clearTimeout(timeout);
-              connection.removeEventListener("icegatheringstatechange", onStateChange);
-              resolve();
-            }
-          }
-          connection.addEventListener("icegatheringstatechange", onStateChange);
-          onStateChange();
+            if (finished) return;
+            finished = true;
+            reject(new Error("The matchmaking service took too long to respond. Please retry."));
+          }, 15000);
+          connection.on("open", function (id) {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeout);
+            resolve(id);
+          });
+          connection.on("error", function (error) {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeout);
+            reject(new Error(peerErrorMessage(error)));
+          });
         });
       }
 
-      function encodeCode(description) {
-        var bytes = new TextEncoder().encode(JSON.stringify({ v: 1, type: description.type, sdp: description.sdp }));
-        var binary = "";
-        for (var i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i]);
-        return "XO1." + btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-      }
-
-      function decodeCode(value, expectedType) {
-        var code = String(value || "").replace(/\s+/g, "");
-        if (code.length > 100000) throw new Error("That code is too long to be a valid invite.");
-        if (code.slice(0, 4).toUpperCase() !== "XO1.") throw new Error("This code doesn’t look right. Copy the full code starting with XO1.");
-        var base64 = code.slice(4).replace(/-/g, "+").replace(/_/g, "/");
-        while (base64.length % 4) base64 += "=";
-        var binary;
-        try { binary = atob(base64); } catch (err) { throw new Error("That code is incomplete or damaged. Copy it again and retry."); }
-        var bytes = new Uint8Array(binary.length);
-        for (var i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-        var data;
-        try { data = JSON.parse(new TextDecoder().decode(bytes)); } catch (err) { throw new Error("That code could not be read. Copy it again and retry."); }
-        if (!data || data.v !== 1 || data.type !== expectedType || typeof data.sdp !== "string" || !data.sdp.includes("v=0")) {
-          throw new Error(expectedType === "offer" ? "That isn’t a valid invite code." : "That isn’t a valid answer code.");
-        }
-        return { type: data.type, sdp: data.sdp };
+      function extractRoomId(value) {
+        var raw = String(value || "").trim();
+        if (!raw) throw new Error("Paste your friend’s invite link or room ID first.");
+        try {
+          var url = new URL(raw);
+          raw = url.searchParams.get("room") || raw;
+        } catch (ignore) {}
+        raw = raw.trim();
+        if (!/^[A-Za-z0-9_-]{4,100}$/.test(raw)) throw new Error("That doesn’t look like a room ID or XO Club invite link.");
+        return raw;
       }
 
       function beginNewConnection() {
-        if (channel) { channel.onclose = null; channel.onmessage = null; channel.onopen = null; }
-        if (peer) { try { peer.close(); } catch (err) {} }
+        disconnecting = true;
+        if (peer) { try { peer.destroy(); } catch (err) {} }
         peer = null;
         channel = null;
+        disconnecting = false;
         localMark = null;
         isHost = false;
         $("inviteOutputBlock").hidden = true;
-        $("answerOutputBlock").hidden = true;
         $("inviteOutput").value = "";
-        $("answerOutput").value = "";
-        $("answerInput").value = "";
         board = Array(9).fill(null);
         turn = "X";
         gameOver = false;
@@ -571,20 +565,18 @@
           beginNewConnection();
           isHost = true;
           localMark = "X";
-          peer = makePeerConnection();
-          attachChannel(peer.createDataChannel("xo-club", { ordered: true }));
-          var offer = await peer.createOffer();
-          await peer.setLocalDescription(offer);
-          setNotice("Finding a direct route… this usually takes just a moment.");
-          await waitForIce(peer);
-          $("inviteOutput").value = encodeCode(peer.localDescription);
+          var hostPeer = makePeer();
+          setNotice("Opening a room… this usually takes a moment.");
+          var roomId = await waitForPeerOpen(hostPeer);
+          var link = new URL(GAME_URL);
+          link.searchParams.set("room", roomId);
+          $("inviteOutput").value = link.toString();
           $("inviteOutputBlock").hidden = false;
-          $("connectButton").disabled = false;
-          setNotice("Invite ready. Send it to your friend, then paste their answer below.", "success");
+          setNotice("Invite ready. Share the link; your friend can tap it to join automatically.", "success");
           render();
         } catch (err) {
-          setNotice(err.message || "Couldn’t create an invite. Please retry.", "error");
-          setTopStatus("Invite failed", "error");
+          setNotice(err.message || "Couldn’t create a game. Please retry.", "error");
+          setTopStatus("Room failed", "error");
         } finally { setBusy(false); }
       }
 
@@ -592,37 +584,20 @@
         if (busy) return;
         setBusy(true);
         try {
-          var offer = decodeCode($("inviteInput").value, "offer");
+          var roomId = extractRoomId($("inviteInput").value);
           beginNewConnection();
           isHost = false;
           localMark = "O";
-          peer = makePeerConnection();
-          await peer.setRemoteDescription(offer);
-          var answer = await peer.createAnswer();
-          await peer.setLocalDescription(answer);
-          setNotice("Finding a direct route… hang tight.");
-          await waitForIce(peer);
-          $("answerOutput").value = encodeCode(peer.localDescription);
-          $("answerOutputBlock").hidden = false;
-          setNotice("Reply ready. Send this answer to your friend and wait for them to connect.", "success");
+          var guestPeer = makePeer();
+          setNotice("Finding your friend’s room…");
+          await waitForPeerOpen(guestPeer);
+          attachChannel(guestPeer.connect(roomId, { reliable: true }));
+          setNotice("Room found. Connecting directly…");
+          setTopStatus("Connecting…", "idle");
           render();
         } catch (err) {
-          setNotice(err.message || "Couldn’t join that invite. Please retry.", "error");
+          setNotice(err.message || "Couldn’t join that game. Please retry.", "error");
           setTopStatus("Join failed", "error");
-        } finally { setBusy(false); }
-      }
-
-      async function connectToFriend() {
-        if (busy || !peer || !isHost) return;
-        setBusy(true);
-        try {
-          var answer = decodeCode($("answerInput").value, "answer");
-          if (peer.signalingState !== "have-local-offer") throw new Error("Create a fresh invite before using this answer.");
-          await peer.setRemoteDescription(answer);
-          setNotice("Answer accepted. Opening the direct game link…");
-          setTopStatus("Connecting…", "idle");
-        } catch (err) {
-          setNotice(err.message || "Couldn’t connect with that answer. Check the code and retry.", "error");
         } finally { setBusy(false); }
       }
 
@@ -639,14 +614,26 @@
           $(id).focus();
           $(id).select();
           try { document.execCommand("copy"); } catch (ignore) {}
-          setNotice("Code selected. Copy it and send it in your chat.", "success");
+          setNotice("Invite link selected. Copy it and send it to your friend.", "success");
         }
       }
 
+      async function shareInvite() {
+        var link = $("inviteOutput").value;
+        if (!link) return;
+        if (navigator.share) {
+          try { await navigator.share({ title: "XO Club game invite", text: "Join my Tic-Tac-Toe game!", url: link }); return; }
+          catch (err) { if (err && err.name === "AbortError") return; }
+        }
+        await copyValue("inviteOutput", "shareInviteButton");
+      }
+
       function disconnect() {
-        if (peer) { try { peer.close(); } catch (err) {} }
+        disconnecting = true;
+        if (peer) { try { peer.destroy(); } catch (err) {} }
         peer = null;
         channel = null;
+        disconnecting = false;
         localMark = null;
         isHost = false;
         board = Array(9).fill(null);
@@ -656,12 +643,8 @@
         winningLine = [];
         scores = { X: 0, O: 0 };
         $("inviteOutputBlock").hidden = true;
-        $("answerOutputBlock").hidden = true;
         $("inviteOutput").value = "";
-        $("answerOutput").value = "";
-        $("answerInput").value = "";
         $("inviteInput").value = "";
-        $("connectButton").disabled = true;
         setNotice("Disconnected. Create an invite or join a friend whenever you’re ready.");
         setTopStatus("Not connected", "idle");
         render();
@@ -680,20 +663,25 @@
       });
       $("createButton").addEventListener("click", createInvite);
       $("joinButton").addEventListener("click", joinInvite);
-      $("connectButton").addEventListener("click", connectToFriend);
       $("copyInviteButton").addEventListener("click", function () { copyValue("inviteOutput", "copyInviteButton"); });
-      $("copyAnswerButton").addEventListener("click", function () { copyValue("answerOutput", "copyAnswerButton"); });
+      $("shareInviteButton").addEventListener("click", shareInvite);
       $("leaveButton").addEventListener("click", disconnect);
       $("rematchButton").addEventListener("click", function () { resetRound(false); });
       $("hostTab").addEventListener("click", function () { showPane("host"); });
       $("joinTab").addEventListener("click", function () { showPane("join"); });
-      $("answerInput").addEventListener("input", function () { $("connectButton").disabled = busy || !peer || !isHost || peer.signalingState !== "have-local-offer" || !this.value.trim(); });
       $("playerName").addEventListener("change", function () { if (!localMark) return; localName = currentName(); render(); if (isConnected()) send({ type: "hello", name: localName }); });
 
-      if (!window.RTCPeerConnection) {
+      if (!window.Peer) {
         $("createButton").disabled = true;
         $("joinButton").disabled = true;
-        setNotice("This browser doesn’t support WebRTC. Try a recent version of Chrome, Edge, Firefox, or Safari.", "error");
+        setNotice("The connection helper did not load. Refresh this page while online and retry.", "error");
+      } else {
+        var roomFromLink = new URLSearchParams(window.location.search).get("room");
+        if (roomFromLink) {
+          showPane("join");
+          $("inviteInput").value = roomFromLink;
+          window.setTimeout(joinInvite, 0);
+        }
       }
       render();
     }());
